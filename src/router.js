@@ -3,18 +3,12 @@ import Home from './pages/Home'
 import Project from './pages/Project'
 
 export default new VueRouter({
-    base: '/file',
+    base: '/develop-blog',
     mode: 'history',
     linkActiveClass: 'active',
     routes: [{
         path: '/',
-        redirect: '/home'
-    }, {
-        path: '/home',
         component: Home
-    }, {
-        path: '/project/:location',
-        component: Project
     }],
     scrollBehavior: (to) => {
         if (to.hash) {

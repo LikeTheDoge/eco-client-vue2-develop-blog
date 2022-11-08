@@ -1,6 +1,6 @@
 <template>
     <div class="project-view">
-        {{md}}
+        <div class="markdown-article markdown-body" v-html="html"></div>
     </div>
 </template>
 
@@ -8,97 +8,179 @@
 import { infoEvent } from "../eventbus/info.js";
 import { titleEvent } from "../eventbus/title.js";
 
-const md = `# [React](https://reactjs.org/) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/facebook/react/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/react.svg?style=flat)](https://www.npmjs.com/package/react) [![CircleCI Status](https://circleci.com/gh/facebook/react.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/facebook/react) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://reactjs.org/docs/how-to-contribute.html#your-first-pull-request)
 
-React is a JavaScript library for building user interfaces.
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import remarkGfm from "remark-gfm";
+import remarkRehype from "remark-rehype";
+import rehypeStringify from "rehype-stringify";
 
-* **Declarative:** React makes it painless to create interactive UIs. Design simple views for each state in your application, and React will efficiently update and render just the right components when your data changes. Declarative views make your code more predictable, simpler to understand, and easier to debug.
-* **Component-Based:** Build encapsulated components that manage their own state, then compose them to make complex UIs. Since component logic is written in JavaScript instead of templates, you can easily pass rich data through your app and keep the state out of the DOM.
-* **Learn Once, Write Anywhere:** We don't make assumptions about the rest of your technology stack, so you can develop new features in React without rewriting existing code. React can also render on the server using Node and power mobile apps using [React Native](https://reactnative.dev/).
+const md = `## 设计背景
+在线服务平台的开发工作一直是以独立的需求进行开发和维护。各个项目之间相互独立，其本身可以说是一系列子项目的集合。
 
-[Learn how to use React in your project](https://reactjs.org/docs/getting-started.html).
+// 工作流程
 
-## Installation
+## 现有问题
 
-React has been designed for gradual adoption from the start, and **you can use as little or as much React as you need**:
+### 外部
 
-* Use [Online Playgrounds](https://reactjs.org/docs/getting-started.html#online-playgrounds) to get a taste of React.
-* [Add React to a Website](https://reactjs.org/docs/add-react-to-a-website.html) as a \` <
-    script >
-    \` tag in one minute.
-* [Create a New React App](https://reactjs.org/docs/create-a-new-react-app.html) if you're looking for a powerful JavaScript toolchain.
+-  研发方缺乏对设计方案的控制
 
-You can use React as a \` <
-    script >
-    \` tag from a [CDN](https://reactjs.org/docs/cdn-links.html), or as a \`react\` package on [npm](https://www.npmjs.com/package/react).
+作为研发方，是希望能够尽量进行复用组件和服务，提高开发效率。然而需求和设计并不会为平台作宏观的设计，研发处于开发流程的末端，迫于工期，缺乏对设计方案的控制。
 
-## Documentation
+> 例如网盘项目，文件目录的形式是一种通用的设计模式，本可以独立抽象出组件和服务作为平台的公共资源，但没有。然后在文档项目种，重新设计了一遍。
 
-You can find the React documentation [on the website](https://reactjs.org/).  
+- 需求方缺乏对研发资源的考虑
 
-Check out the [Getting Started](https://reactjs.org/docs/getting-started.html) page for a quick overview.
+作为需求方，是希望能够实现出最符合自身需求的设计。但研发资源是是有限的，项目经理只能再各个需求方中做取舍。最后结果就是，需求越强势，就越快满足，而另外的需求就能拖就拖（响应速度慢）。
 
-The documentation is divided into several sections:
+> 案例编辑单独定制了一套复杂的发版流程。整个流程无法复用与其他业务，而这个业务仅3、4个人在用。
 
-* [Tutorial](https://reactjs.org/tutorial/tutorial.html)
-* [Main Concepts](https://reactjs.org/docs/hello-world.html)
-* [Advanced Guides](https://reactjs.org/docs/jsx-in-depth.html)
-* [API Reference](https://reactjs.org/docs/react-api.html)
-* [Where to Get Support](https://reactjs.org/community/support.html)
-* [Contributing Guide](https://reactjs.org/docs/how-to-contribute.html)
+- 设计方缺乏对实现方案的把控
 
-You can improve it by sending pull requests to [this repository](https://github.com/reactjs/reactjs.org).
+设计方对接需求和研发。设计方案应该既能满足需求，又能落地实现。可是目前交付的设计方案，对于流程图、原型、效果图等面向需求方的交付比较完整。对于研发需求的功能结构图，信息架构图基本没有。于是很多细节问题都在研发的时候才暴露。
 
-## Examples
+> 文档，案例等涉及到流程的项目，基本上都是一边开发一边修改设计，在开发过程中浪费了很多时间。
 
-We have several examples [on the website](https://reactjs.org/). Here is the first one to get you started:
+### 内部
 
-\`\`\`jsx
-import { createRoot } from 'react-dom/client';
+- 开发资源有限，团队成长受限
 
-function HelloMessage({ name }) {
-  return <div>Hello {name}</div>;
-}
+项目越做越多。老项目不断维护需要开发资源，而新项目的开发也需要开发资源。但团队前端长期仅有两人，后端两人，一运维一测试，基本上是最小的开发团队。
 
-const root = createRoot(document.getElementById('container'));
-root.render(<HelloMessage name="Taylor" />);
-\`\`\`
+局限于业务开发，每天讨论业务的时间大于对技术方案的讨论，人员技术能力也难以成长。
 
-This example will render "Hello Taylor" into a container on the page.
+> 首页、导航、案例的样式修改从年初断断续续到年末，每一次设计的变动甚至图片的变动都需要前端跟进。
+> 这种改样式，画页面，增删改查等繁杂的工作占据开发大量的时间。对于开发人员进阶成长来说，也没有太多帮助
 
-You'll notice that we used an HTML-like syntax; [we call it JSX](https://reactjs.org/docs/introducing-jsx.html). JSX is not required to use React, but it makes code more readable, and writing it feels like writing HTML. If you're using React as a \`<script>\` tag, read [this section](https://reactjs.org/docs/add-react-to-a-website.html#optional-try-react-with-jsx) on integrating JSX; otherwise, the [recommended JavaScript toolchains](https://reactjs.org/docs/create-a-new-react-app.html) handle it automatically.
+- 缺乏技术深度与经验沉淀。
 
-## Contributing
+受限于开发资源和需求，平时基本是业务开发，缺乏对于一些高风险和长期投入的技术探索，即便这些技术能够带来长期收益。团队的研发能力完全取决于个人能力。招的人能力强经验多，业务开发效率就高，反之亦然。
 
-The main purpose of this repository is to continue evolving React core, making it faster and easier to use. Development of React happens in the open on GitHub, and we are grateful to the community for contributing bugfixes and improvements. Read below to learn how you can take part in improving React.
+> 研发一直希望灰度发布，容器化，主备服务，服务热更新等技术能够落实到开发中，以提高服务稳定性，优化发版流程。但是因为业务需求多，一直没有做。  
 
-### [Code of Conduct](https://code.fb.com/codeofconduct)
+> 之前的产品经理比较有经验，开发就比较顺畅。而这些经验与设计方法没有转化为团队的资产，之后产品经理经验不足，设计上出纰漏的地方就很多。
 
-Facebook has adopted a Code of Conduct that we expect project participants to adhere to. Please read [the full text](https://code.fb.com/codeofconduct) so that you can understand what actions will and will not be tolerated.
+- 缺乏整体设计与长期规划
 
-### [Contributing Guide](https://reactjs.org/docs/how-to-contribute.html)
+在业务开发的过程中，存在很多业务互相关联，是可以作为一个整体设计。但是由于短平快的业务开发模式，很多时候这种设计模式仅仅以复制粘贴代码的方式实现。
 
-Read our [contributing guide](https://reactjs.org/docs/how-to-contribute.html) to learn about our development process, how to propose bugfixes and improvements, and how to build and test your changes to React.
+对于平台规划基本上是具体子项目规划和进度。对于在线服务平台整体设计比较少，且多在于平台研发的早期。随着平台的子项目越来越多，早期设计的框架也逐渐暴露出越来越多的问题，也没法去改善。难以拓展更多的业务。
 
-### Good First Issues
+> 例如社区项目，早期设计了专栏和问答模块。之后衍生了技术分享和培训专区，内部专区等子模块和项目。这种论讨类的项目之间彼此主体的框架是类似的，只是具体细节有所变动，本可以一种整体设计的方式完成。但实际开发中，仅是简单的复制老代码，然后改代码的方式完成。以至于后期维护困难
 
-To help you get your feet wet and get you familiar with our contribution process, we have a list of [good first issues](https://github.com/facebook/react/labels/good%20first%20issue) that contain bugs that have a relatively limited scope. This is a great place to get started.
 
-### License
 
-React is [MIT licensed](./LICENSE).`;
+## 平台架构设计
+
+之前一直仅以需求进行开发，存在以下问题：
+
+- 项目设计主要以需求方主导，研发难以将一些通用的功能、组件进行整体设计，适配其他业务
+
+- 有很多通用的组件融入到具体的业务中，难以独立展示和测试
+
+- 项目有具体工期需求，一些需要长期时间开发或者存在风险的技术难以落地
+
+**平台架构设计**，则是将所有通用的资源单独抽离出来，作为一个独立项目的形式进行维护与设计。
+
+- 基于功能非业务进行抽象设计，与具体的业务脱离。
+
+- 能以拓展的方式与具体业务进行适配。
+
+- 以功能迭代的形式进行开发，能够不断的拓展功能，完善细节。
+
+## 平台范围
+
+[平台范围「思维导图」](https://boardmix.cn/app/share?token=LOgLVuHrNEq3X3bz6XIl0oUYiA-lNMh0zFXkRBiZRU9GIPPLnhHKkKwvlQR5z2GyYzZUSHaq2ypY3a9cM73lQleUwgNP-orum2HrEzQPFPI=&inviteCode=zlWtcd)
+
+
+> 目前仅仅只是将部分资源纳入到平台的范围，之后用户、权限等内容会逐步纳入平台进行独立管理。
+
+
+## 开发流程
+
+（图）
+
+## 平台资源
+
+平台资源目前包括一下几个方面。
+
+1. 平台基础设施
+
+    - 容器镜像服务
+
+    - 前端镜像服务
+
+    - (todo) CI/CD 服务
+
+    
+2. 平台资源组件
+
+    - 前端基础库
+
+    - 前端视觉组件
+
+    - 项目应用模板
+
+
+3. 平台开发文档
+
+    - 应用开发文档
+
+    - 项目开发文档
+
+## 平台应用
+
+- 用户登录服务
+
+独立的登录服务，使整个项目可以独立部署，用在线服务平台（eco）的用户数据。
+
+- 静态资源管理
+
+用于各类平台资源的管理，包括开发文档，设计文档，项目所需要的静态脚本，设计交付的图片资源等等。
+
+- 文件在线编辑
+
+用于静态资源管理项目中的在线编辑项目。目前仅支持在线修改 markdown 文档，后续考虑支持在线 excel 和在线 ppt。
+
+- 平台开发文档
+
+用于静态资源管理项目中平台文档的展示项目。方便开发查阅，搜索相关文档。
+
+- 业务评论服务
+
+一个通用的评论服务，目前用于平台开发文档项目中，开发人员对于文档的交流。
+
+`;
 
 export default {
     mounted() {
         titleEvent.$emit("update", "首页");
         infoEvent.$emit("update", null);
+        this.load(md)
+    },
+
+    methods: {
+        async load(markdown) {
+            const file = await unified()
+                .use(remarkParse)
+                .use(remarkGfm)
+                .use(remarkRehype)
+                .use(rehypeStringify)
+                .process(markdown);
+            this.html = file.toString()
+            console.log(this.html)
+        },
     },
 
     data() {
-        return { md };
+        return { html: "" };
     },
 };
 </script>
 
 <style scoped>
+.markdown-article{
+    margin: 0 48px;
+}
 </style>

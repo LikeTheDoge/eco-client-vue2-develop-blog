@@ -4,6 +4,7 @@ import Antd from 'ant-design-vue';
 import VueRouter from 'vue-router';
 import router from './src/router'
 import 'ant-design-vue/dist/antd.css'
+import './src/markdown-style/index.scss'
 
 import { EIcon } from 'e-components-file/lib/EIcon.common'
 import { ETree } from 'e-components-file/lib/ETree.common'

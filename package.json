@@ -6,7 +6,9 @@
     "main": "index.js",
     "scripts": {
         "serve": "vue-cli-service serve --mode=development",
-        "build:dev": "vue-cli-service build  --mode=production"
+        "clean": "rimraf ./dist",
+        "prod": "npx togii-static 5173 ./dist",
+        "build": "yarn clean && vue-cli-service build  --mode=production"
     },
     "author": "",
     "license": "ISC",
@@ -16,6 +18,7 @@
         "core-js": "^3.6.5",
         "e-components-file": "^0.0.6",
         "e-model": "^0.0.7",
+        "github-markdown-css": "^5.1.0",
         "moment": "^2.29.1",
         "register-service-worker": "^1.7.1",
         "rehype-stringify": "^9.0.3",
@@ -35,8 +38,10 @@
         "@vue/cli-plugin-vuex": "~4.5.0",
         "@vue/cli-service": "~4.5.0",
         "@vue/eslint-config-standard": "^5.1.2",
+        "rimraf": "^3.0.2",
         "sass": "^1.26.5",
         "sass-loader": "^8.0.2",
+        "togii-static": "^0.0.27",
         "vue-template-compiler": "^2.6.11"
     }
 }

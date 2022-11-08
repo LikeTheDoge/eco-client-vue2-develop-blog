@@ -1,6 +1,6 @@
 module.exports = {
-    publicPath: `/file/`,
-    outputDir: '/dist',
+    publicPath: `/develop-blog/`,
+    outputDir: './dist/develop-blog/',
     lintOnSave: false,
     pages: {
         index: {
@@ -25,18 +25,18 @@ module.exports = {
     },
     devServer: {
         port: 5173,
-        proxy: {
-            '/': {
-                target: 'http://eco.dameng.com/',
-                ws: true,
-                bypass: function(req) {
-                    const url = req.url.replace(/(http:\/\/)?localhost:[0-9]+/, '')
-                    if (url.indexOf(`/file`) === 0) {
-                        return req.next();
-                    }
-                },
-                changeOrigin: true
-            }
-        }
+        // proxy: {
+        //     '/': {
+        //         target: 'http://eco.dameng.com/',
+        //         ws: true,
+        //         bypass: function(req) {
+        //             const url = req.url.replace(/(http:\/\/)?localhost:[0-9]+/, '')
+        //             if (url.indexOf(`/file`) === 0) {
+        //                 return req.next();
+        //             }
+        //         },
+        //         changeOrigin: true
+        //     }
+        // }
     },
 }

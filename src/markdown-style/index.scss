@@ -1,0 +1,9 @@
+@import "./vars-palette.scss";
+@import "./vars-theme.scss";
+@import "./vars-typora.scss";
+.markdown-body {
+    @import "./base.scss";
+    @import "./heading.scss";
+    @import "./list.scss";
+    @import "./table.scss";
+}
