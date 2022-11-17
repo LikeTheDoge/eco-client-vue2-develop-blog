@@ -1,5 +1,5 @@
 <template>
-    <div :class="{ 'info-panel': true, show: !!current}">
+    <div :class="{ 'info-panel': true, show: !hidden}">
         <div class="info-panel-inner">
             <FileRecords :info="null" />
         </div>
@@ -8,17 +8,17 @@
 
 
 <script>
-
 import FileRecords from "./info/record/FileRecords.vue";
+import { pageEvent } from "../eventbus/page";
 
 export default {
     components: {
-        FileRecords
+        FileRecords,
     },
     data() {
         return {
             states: [],
-            current: null,
+            hidden: false,
             createComment: (obj) =>
                 Object.assign(new CommentInputWithAt(), obj),
         };
@@ -29,9 +29,14 @@ export default {
         },
     },
     mounted() {
-        document.body.addEventListener("dblclick", () => {
-            this.current = !this.current;
-        });
+        pageEvent.$on("update", (page) => (this.hidden = !page));
+        
+        pageEvent.$on('focusContent',()=>{
+            this.hidden = true
+        })
+        pageEvent.$on('showSider',()=>{
+            this.hidden = false
+        })
     },
 };
 </script>
@@ -46,13 +51,17 @@ export default {
     padding-top: 54px;
     transition: all 0.6s cubic-bezier(0.17, 0.67, 0.36, 0.99);
     &.show {
-        border-left: 1px solid var(--theme-color-light);
+        border-left: 2px solid var(--theme-color-light);
         width: 320px;
     }
 
     > .info-panel-inner {
         width: 320px;
         height: 100%;
+    }
+
+    @media print {
+        display: none;
     }
 }
 </style>

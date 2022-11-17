@@ -1,11 +1,16 @@
 <template>
-    <main id="app">
+    <main
+        id="app"
+        v-show="loaded"
+    >
         <SiderBar />
         <MainPage>
             <TopBar slot="bar" />
-            <router-view
-                slot="content"
-            ></router-view>
+            <!-- <router-view ></router-view> -->
+            <template slot="content">
+                <HomePage />
+                <ArticelContent />
+            </template>
         </MainPage>
         <CurrentInfo />
     </main>
@@ -16,9 +21,60 @@ import SiderBar from "./layout/SiderBar.vue";
 import MainPage from "./layout/MainPage.vue";
 import TopBar from "./layout/TopBar.vue";
 import CurrentInfo from "./layout/CurrentInfo.vue";
+import HomePage from "./layout/HomePage.vue";
+import ArticelContent from "./layout/AritcleConent.vue";
+import { pageEvent } from "./eventbus/page";
+import { getArticleFile } from "./requests/aritcle";
 
 export default {
-    components: { SiderBar, CurrentInfo, TopBar, MainPage },
+    components: {
+        SiderBar,
+        CurrentInfo,
+        TopBar,
+        MainPage,
+        HomePage,
+        ArticelContent,
+    },
+    computed: {
+        post() {
+            const path = this.$route.path;
+            if (path.indexOf("/post") === 0) return path.replace("/post", "");
+            else return null;
+        },
+    },
+    data() {
+        return { loaded: false, focusContent: false };
+    },
+    watch: {
+        async post() {
+            this.reflash();
+        },
+    },
+    methods: {
+        async reflash() {
+            if (this.post) {
+                const file = await getArticleFile();
+                console.log(file);
+                pageEvent.$emit("update", file);
+                this.loaded = true;
+                this.focusContent = false
+            } else {
+                pageEvent.$emit("update", null);
+                this.loaded = true;
+                this.focusContent = false
+            }
+        },
+    },
+    mounted() {
+        this.reflash();
+        document.body.ondblclick=()=>{
+            if(!this.post) return
+            if(this.focusContent) pageEvent.$emit('showSider')
+            if(!this.focusContent) pageEvent.$emit('focusContent')
+            this.focusContent = !this.focusContent
+
+        }
+    },
 };
 </script>
 

@@ -1,5 +1,36 @@
 import { eModel, eKey, eJson, eType } from 'e-model'
+import { getAvatarUrl } from 'e-user'
 
+
+/**
+ * Format bytes as human-readable text.
+ * 
+ * @param bytes Number of bytes.
+ * @param si True to use metric (SI) units, aka powers of 1000. False to use 
+ *           binary (IEC), aka powers of 1024.
+ * @param dp Number of decimal places to display.
+ * 
+ * @return Formatted string.
+ */
+function humanFileSize(bytes, si = false, dp = 1) {
+    const thresh = si ? 1000 : 1024;
+
+    if (Math.abs(bytes) < thresh) {
+        return bytes + ' B';
+    }
+
+    const units = si ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'] : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+    let u = -1;
+    const r = 10 ** dp;
+
+    do {
+        bytes /= thresh;
+        ++u;
+    } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+
+
+    return bytes.toFixed(dp) + ' ' + units[u];
+}
 
 @eModel('ProjectInfo')
 export class ProjectInfo {
@@ -9,7 +40,7 @@ export class ProjectInfo {
     projectId = ''
 
     @eType('string')
-    @eJson('name')
+    @eJson('projectName')
     title = ''
 
     @eType('string')
@@ -37,24 +68,51 @@ export class FolderInfo {
     @eJson('remark')
     remark = ''
 
+
     @eType('string')
-    @eJson('location')
+    @eJson((m, j) => {
+        m.path = `/${j.project?.location}${j.path}`
+    })
+    path = ''
+
+    @eType('string')
+    @eJson('name')
     location = ''
 
-    @eKey
     @eType('string')
     @eJson('projectId')
     projectId = ''
 
-    @eKey
     @eType('string')
-    @eJson('parentId')
-    parentId = ''
+    @eJson(
+        (m, j) => { m.parentId = j.parentId === "0" ? null : j.parentId },
+        (m, j) => { j.parentId = m.parentId ? "0" : m.parentId }
+    )
+    parentId = null
 
-    @eKey
+
+    // 是否有子目录
     @eType('boolean')
-    @eJson('existChildrenFolder')
+    @eJson('hasSubDir')
     existChildrenFolder
+
+    // 是否有共享文件
+    @eType('boolean') @eJson(
+        (m, j) => { m.hasSharedFile = !!j.hasSharedFile }
+    )
+    hasSharedFile
+
+    @eType('datetime')
+    @eJson('updateTime')
+    contentUpdateTime
+
+    @eType('datetime')
+    @eJson('updateTime')
+    updateTime
+
+    @eType('datetime')
+    @eJson('createTime')
+    createTime
 }
 
 @eModel('FileInfo')
@@ -62,7 +120,7 @@ export class FileInfo {
     static type(file) {
         const ext = (file.ext || '').toLocaleLowerCase()
         const types = {
-            'image': ['jpg', 'png', 'gif'],
+            'image': ['jpg', 'png', 'gif', 'webp'],
             'excel': ['xls'],
             'word': ['doc'],
             'ppt': ['ppt'],
@@ -90,6 +148,10 @@ export class FileInfo {
     fileId = ''
 
     @eType('string')
+    @eJson('remark')
+    remark = ''
+
+    @eType('string')
     @eJson('fileId')
     uploadFileId = ''
 
@@ -98,7 +160,11 @@ export class FileInfo {
     name = ''
 
     @eType('string')
-    @eJson('ext')
+    @eJson((m, j) => {
+        const list = (j.name || '').split('.')
+        if (list.length < 2) m.ext = ''
+        else m.ext = list[list.length - 1].toLocaleLowerCase()
+    })
     ext = ''
 
     @eType('string')
@@ -106,10 +172,96 @@ export class FileInfo {
     projectId = ''
 
     @eType('string')
-    @eJson('folderId')
+    @eJson((m, j) => {
+        m.folderId = j.folderId || j.parentId
+        m.folderId = m.folderId === '0' ? null : m.folderId
+    })
     folderId = ''
+
+    @eType('string')
+    @eJson((m, j) => {
+        m.path = `/${j.project?.location}${j.path}`
+    })
+    path = ''
 
     @eType('string')
     @eJson('location')
     location = ''
+
+    @eType('datetime')
+    @eJson('updateTime')
+    contentUpdateTime
+
+    @eType('datetime')
+    @eJson('updateTime')
+    updateTime
+
+    @eType('datetime')
+    @eJson('createTime')
+    createTime
+
+
+    @eType('string')
+    @eJson((m, j) => {
+        const num_size = j.platFile ? j.platFile.size : 0
+        const str_size = humanFileSize(num_size, true, 2)
+        m.fileSize = str_size
+    })
+    fileSize = ''
+
+    @eType('boolean')
+    @eJson((m, j) => {
+        m.isShared = !!j.isSharedFile
+    })
+    isShared = false
+
+    @eType('string')
+    @eJson((m, j) => {
+        m.downloadUrl = j.platFile ? j.platFile.downLoadUrl : ''
+    })
+    downloadUrl = ''
+
+    @eType('string')
+    @eJson('location')
+    sharedUrl = ''
+}
+
+@eModel('Record')
+export class Record {
+
+    @eKey
+    @eType('string')
+    @eJson('id')
+    recordId = ''
+
+    @eType('string')
+    @eJson('targetId')
+    targetId = ''
+
+
+    @eType('datetime')
+    @eJson('createTime')
+    createTime = ''
+
+    @eType('string')
+    @eJson((m, j) => {
+        m.createUserName = j.sysUser ?
+            j.sysUser.nickname :
+            '(暂无)'
+    })
+    createUserName = ''
+
+    @eType('string')
+    @eJson((m, j) => {
+        m.createUserAvatar = j.sysUser ?
+            getAvatarUrl(j.sysUser.avatar) :
+            ''
+    })
+    createUserAvatar = ''
+
+
+    @eType('string')
+    @eJson('content')
+    content = ''
+
 }

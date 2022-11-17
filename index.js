@@ -3,8 +3,11 @@ import Vue from 'vue'
 import Antd from 'ant-design-vue';
 import VueRouter from 'vue-router';
 import router from './src/router'
+import axios from 'axios'
 import 'ant-design-vue/dist/antd.css'
 import './src/markdown-style/index.scss'
+import { ERequest, AxiosAdapter } from 'e-request'
+import { auth } from './src/auth'
 
 import { EIcon } from 'e-components-file/lib/EIcon.common'
 import { ETree } from 'e-components-file/lib/ETree.common'
@@ -44,3 +47,9 @@ new Vue({
     router: router,
     render: H => H(App)
 }).$mount('#app')
+
+
+ERequest.adapter = new AxiosAdapter(axios)
+ERequest.fetchToken = () => Promise.resolve(auth.getToken())
+ERequest.errorAlert = (e) => alert(e.message)
+ERequest.authDeal = (e) => console.error(e)

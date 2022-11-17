@@ -1,15 +1,14 @@
 import VueRouter from 'vue-router';
-import Home from './pages/Home'
-import Project from './pages/Project'
+// import Home from './pages/Home'
 
 export default new VueRouter({
     base: '/develop-blog',
     mode: 'history',
     linkActiveClass: 'active',
-    routes: [{
-        path: '/',
-        component: Home
-    }],
+    // routes: [{
+    //     path: '/:pathMatch(.*)*',
+    //     component: Home
+    // }],
     scrollBehavior: (to) => {
         if (to.hash) {
             return {

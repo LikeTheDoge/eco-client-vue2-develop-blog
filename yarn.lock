@@ -2177,6 +2177,23 @@ aws4@^1.8.0:
   resolved "http://1.15.102.208:4873/aws4/-/aws4-1.11.0.tgz#d61f46d83b2519250e2784daf5b09479a8b41c59"
   integrity sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
 
+axios@^0.27.2:
+  version "0.27.2"
+  resolved "http://1.15.102.208:4873/axios/-/axios-0.27.2.tgz#207658cc8621606e586c85db4b41a750e756d972"
+  integrity sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==
+  dependencies:
+    follow-redirects "^1.14.9"
+    form-data "^4.0.0"
+
+axios@^1.1.3:
+  version "1.1.3"
+  resolved "http://1.15.102.208:4873/axios/-/axios-1.1.3.tgz#8274250dada2edf53814ed7db644b9c2866c1e35"
+  integrity sha512-00tXVRwKx/FZr/IDVFt4C+f9FYairX517WoGCL6dpOntqLkZofjhu43F/Xl44UOpqa+9sLFDrG/XAnFsUYgkDA==
+  dependencies:
+    follow-redirects "^1.15.0"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
+
 babel-extract-comments@^1.0.0:
   version "1.0.0"
   resolved "http://1.15.102.208:4873/babel-extract-comments/-/babel-extract-comments-1.0.0.tgz#0a2aedf81417ed391b85e18b4614e693a0351a21"
@@ -2925,7 +2942,7 @@ color@^3.0.0:
     color-convert "^1.9.3"
     color-string "^1.6.0"
 
-combined-stream@^1.0.6, combined-stream@~1.0.6:
+combined-stream@^1.0.6, combined-stream@^1.0.8, combined-stream@~1.0.6:
   version "1.0.8"
   resolved "http://1.15.102.208:4873/combined-stream/-/combined-stream-1.0.8.tgz#c3d45a8b34fd730631a110a8a2520682b31d5a7f"
   integrity sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==
@@ -3725,6 +3742,15 @@ duplexify@^3.4.2, duplexify@^3.6.0:
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
 
+e-auth@^0.0.12:
+  version "0.0.12"
+  resolved "http://1.15.102.208:4873/e-auth/-/e-auth-0.0.12.tgz#d7d3e7e96c94f70c681e2cc6603af4bc8f35a6f9"
+  integrity sha512-RZnBf86DRcQyFASqLEOyuKDi78ajmjMIxRrxCAxTm/AIEz0MQsv1IykjBvAnsLN3pMbYawpwLnOVUkvSGTNbpQ==
+  dependencies:
+    axios "^0.27.2"
+    e-user "^0.0.12"
+    js-cookie "^3.0.1"
+
 e-components-file@^0.0.6:
   version "0.0.6"
   resolved "http://1.15.102.208:4873/e-components-file/-/e-components-file-0.0.6.tgz#a8b01ebc1841ee73d1fb6e7d344f278093facd61"
@@ -3737,6 +3763,21 @@ e-model@^0.0.7:
   version "0.0.7"
   resolved "http://1.15.102.208:4873/e-model/-/e-model-0.0.7.tgz#3cc862927404303d4ab71011b713f3a8fa7bc2c8"
   integrity sha512-RFavcun+D0vyRo5fpb5M7y16T1ZVlgPwKq2EuE+DrOH7r0YcqUeW11HUiAAhYHtfQ7EPpE1W3RVxOHBFGEx+Hw==
+
+e-request@^0.0.12:
+  version "0.0.12"
+  resolved "http://1.15.102.208:4873/e-request/-/e-request-0.0.12.tgz#8dbf4fb576de2db43d5a8acf59d9169014afe967"
+  integrity sha512-ltpxsQ2L8M5XWN2yr+jlvmAE7+Jeu9qELeNLSsawpBVetxNJdVedRQpxNKTfa0MiOQ9P8NjUsAeG3/6OwywvZw==
+  dependencies:
+    axios "^0.27.2"
+
+e-user@^0.0.12:
+  version "0.0.12"
+  resolved "http://1.15.102.208:4873/e-user/-/e-user-0.0.12.tgz#8276963f2c6e9d491f8fe7f8681d3f7764ac194b"
+  integrity sha512-sLNVK4V/n1K2ER7Fh4pYQe+b0SumVMyFg8hIje2wLpQBG1WLctmWOiAkunBsQ3+s+Q7PpptaqliX907Vr/gKhQ==
+  dependencies:
+    axios "^0.27.2"
+    js-cookie "^3.0.1"
 
 easy-stack@1.0.1:
   version "1.0.1"
@@ -4276,7 +4317,7 @@ flush-write-stream@^1.0.0:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
 
-follow-redirects@^1.0.0:
+follow-redirects@^1.0.0, follow-redirects@^1.14.9, follow-redirects@^1.15.0:
   version "1.15.2"
   resolved "http://1.15.102.208:4873/follow-redirects/-/follow-redirects-1.15.2.tgz#b460864144ba63f2681096f274c4e57026da2c13"
   integrity sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
@@ -4290,6 +4331,15 @@ forever-agent@~0.6.1:
   version "0.6.1"
   resolved "http://1.15.102.208:4873/forever-agent/-/forever-agent-0.6.1.tgz#fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
   integrity sha512-j0KLYPhm6zeac4lz3oJ3o65qvgQCcPubiyotZrXqEaG4hNagNYO8qdlUrX5vwqv9ohqeT/Z3j6+yW067yWWdUw==
+
+form-data@^4.0.0:
+  version "4.0.0"
+  resolved "http://1.15.102.208:4873/form-data/-/form-data-4.0.0.tgz#93919daeaf361ee529584b9b31664dc12c9fa452"
+  integrity sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==
+  dependencies:
+    asynckit "^0.4.0"
+    combined-stream "^1.0.8"
+    mime-types "^2.1.12"
 
 form-data@~2.3.2:
   version "2.3.3"
@@ -5460,6 +5510,11 @@ javascript-stringify@^2.0.1:
   version "2.1.0"
   resolved "http://1.15.102.208:4873/javascript-stringify/-/javascript-stringify-2.1.0.tgz#27c76539be14d8bd128219a2d731b09337904e79"
   integrity sha512-JVAfqNPTvNq3sB/VHQJAFxN/sPgKnsKrCwyRt15zwNCdrMMJDdcEOdubuy+DuJYYdm0ox1J4uzEuYKkN+9yhVg==
+
+js-cookie@^3.0.1:
+  version "3.0.1"
+  resolved "http://1.15.102.208:4873/js-cookie/-/js-cookie-3.0.1.tgz#9e39b4c6c2f56563708d7d31f6f5f21873a92414"
+  integrity sha512-+0rgsUXZu4ncpPxRL+lNEptWMOWl9etvPHc/koSRp6MPwpRYAhmk0dUG00J4bxVV3r9uUzfo24wW0knS07SKSw==
 
 js-message@1.0.7:
   version "1.0.7"
@@ -7590,6 +7645,11 @@ proxy-addr@~2.0.7:
   dependencies:
     forwarded "0.2.0"
     ipaddr.js "1.9.1"
+
+proxy-from-env@^1.1.0:
+  version "1.1.0"
+  resolved "http://1.15.102.208:4873/proxy-from-env/-/proxy-from-env-1.1.0.tgz#e102f16ca355424865755d2c9e8ea4f24d58c3e2"
+  integrity sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
 
 prr@~1.0.1:
   version "1.0.1"

@@ -1,7 +1,7 @@
 <template>
     <div :class="{'file-records':true,detail}">
         <div class="file-records-title">
-            <div>属性修改记录</div>
+            <div>最近修改记录</div>
         </div>
         <div class="file-records-detail" ref="detail">
             <SelfRecordItem

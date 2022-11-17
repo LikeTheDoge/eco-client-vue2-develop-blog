@@ -1,4 +1,5 @@
 <template>
+
     <div class="sider-menu">
         <CommentInput
             class="comment-input"
@@ -37,12 +38,12 @@ export default {
     
     .comment-input{
         background: #fff;
-        border: 1px solid #ccc;
+        border: 2px solid #333;
         border-radius: 12px;
         margin: 0 24px 0 12px;
         &.hide{
             background: #eee;
-            border: 1px solid #fff;
+            border: 2px solid #fff;
         }
     }
 }

@@ -15,9 +15,13 @@
     "dependencies": {
         "@babel/plugin-proposal-decorators": "^7.19.1",
         "ant-design-vue": "^1.7.4",
+        "axios": "^1.1.3",
         "core-js": "^3.6.5",
+        "e-auth": "^0.0.12",
         "e-components-file": "^0.0.6",
         "e-model": "^0.0.7",
+        "e-request": "^0.0.12",
+        "e-user": "^0.0.12",
         "github-markdown-css": "^5.1.0",
         "moment": "^2.29.1",
         "register-service-worker": "^1.7.1",

@@ -1,21 +1,4 @@
-<template>
-    <div class="project-view">
-        <div class="markdown-article markdown-body" v-html="html"></div>
-    </div>
-</template>
-
-<script>
-import { infoEvent } from "../eventbus/info.js";
-import { titleEvent } from "../eventbus/title.js";
-
-
-import { unified } from "unified";
-import remarkParse from "remark-parse";
-import remarkGfm from "remark-gfm";
-import remarkRehype from "remark-rehype";
-import rehypeStringify from "rehype-stringify";
-
-const md = `## 设计背景
+export const md = `## 设计背景
 在线服务平台的开发工作一直是以独立的需求进行开发和维护。各个项目之间相互独立，其本身可以说是一系列子项目的集合。
 
 // 工作流程
@@ -170,35 +153,3 @@ const md = `## 设计背景
 > 用于开发工作中 / 业务评论组件和服务演示 / markdown 相关组件的演示
 
 `;
-
-export default {
-    mounted() {
-        titleEvent.$emit("update", "首页");
-        infoEvent.$emit("update", null);
-        this.load(md)
-    },
-
-    methods: {
-        async load(markdown) {
-            const file = await unified()
-                .use(remarkParse)
-                .use(remarkGfm)
-                .use(remarkRehype)
-                .use(rehypeStringify)
-                .process(markdown);
-            this.html = file.toString()
-            console.log(this.html)
-        },
-    },
-
-    data() {
-        return { html: "" };
-    },
-};
-</script>
-
-<style scoped>
-.markdown-article{
-    margin: 0 48px;
-}
-</style>
