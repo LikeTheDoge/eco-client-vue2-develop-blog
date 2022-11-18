@@ -25,6 +25,8 @@ import TriggleChange from './src/components/common/TriggleChange.vue'
 import SimpleInput from './src/components/common/SimpleInput.vue'
 import SimpleTextarea from './src/components/common/SimpleTextarea.vue'
 import SimpleActionTitle from './src/components/common/SimpleActionTitle.vue'
+import DateText from './src/components/common/DateText.vue'
+import UserAvatar from './src/components/common/UserAvatar'
 import CommentInput from './src/components/discuss/CommentInput.vue'
 import { Flex } from './src/components/flex/index'
 
@@ -36,13 +38,15 @@ Vue.use(EFileIcon)
 Vue.use(EUploadArea)
 
 Vue.component('ETree', ETree)
+Vue.component('DateText', DateText)
+Vue.component('UserAvatar', UserAvatar)
 Vue.component('ETreeItem', ETreeItem)
 Vue.component('TriggleChange', TriggleChange)
 Vue.component('SimpleInput', SimpleInput)
 Vue.component('SimpleTextarea', SimpleTextarea)
 Vue.component('SimpleActionTitle', SimpleActionTitle)
 Vue.component('CommentInput', CommentInput)
-
+DateText
 new Vue({
     router: router,
     render: H => H(App)

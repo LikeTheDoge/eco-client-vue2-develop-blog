@@ -1,58 +1,45 @@
 <template>
     <div :class="{'home-page':true,hidden}">
+        <SlideShow />
+
         <div class="home-page-inner">
+
             <div
                 class="article-list"
-                v-for="v in [0,1,2]"
-                :key="v"
+            >
+
+                <div class="article-list-content">
+                    <div class="article-list-items">
+                        <ArticleFile v-for="file in (rootFiles  ||[])"  :key="file.fileId" :file="file"/>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="article-list"
+                v-for="root in treeData.roots.reverse()"
+                :key="root.folderId"
             >
                 <div class="article-list-title">
-                    <div class="title">技术架构设计</div>
-                    <div class="name">tech</div>
+                    <div class="title">{{title(root)}}</div>
+                    <div class="name">{{root.name}}</div>
                     <div class="hr"></div>
                 </div>
 
                 <div class="article-list-content">
-                    <div class="article-list-sub-title">前端技术</div>
-                    <div
-                        class="article-list-items"
-                    >
-
-                        <div
-                            class="article-list-item"
-                            v-for="v in [0,1,2,3,4,5,6,7]"
-                            :key="v"
-                        >
-                            <div class="article-icon"></div>
-                            <div class="article-info">
-                                <div class="article-info-link">
-                                    <router-link to="/post/aaaa"><span class="tag">前端 :</span>技术架构设计概述契丹段述技术架构设计概述契丹段述</router-link>
-                                </div>
-                                <div class="article-info-desc">Bob Smith - December 22, 2021</div>
-                            </div>
-                        </div>
+                    <div class="article-list-items">
+                        <ArticleFile v-for="file in (treeData.childrenFiles.get(root.folderId)  ||[])"  :key="file.fileId" :file="file"/>
                     </div>
                 </div>
 
-                <div class="article-list-content">
-                    <div class="article-list-sub-title">运维实施</div>
-                    <div
-                        class="article-list-items"
-                    >
-
-                        <div
-                            class="article-list-item"
-                            v-for="v in [0,1,2]"
-                            :key="v"
-                        >
-                            <div class="article-icon"></div>
-                            <div class="article-info">
-                                <div class="article-info-link">
-                                    <router-link to="/post/aaaa"><span class="tag">前端 :</span>技术架构设计概述契丹段述技术架构设计概述契丹段述</router-link>
-                                </div>
-                                <div class="article-info-desc">Bob Smith - December 22, 2021</div>
-                            </div>
-                        </div>
+                <div
+                    class="article-list-content"
+                    :key="sec.folderId"
+                    v-for="sec in folders.filter(v=>v.parentId === root.folderId)"
+                >
+                    <div class="article-list-sub-title">{{title(sec)}}</div>
+                    <div class="article-list-items">
+                        <ArticleFile v-for="file in (treeData.childrenFiles.get(sec.folderId) ||[])"  :key="file.fileId" :file="file"/>
                     </div>
                 </div>
             </div>
@@ -64,16 +51,93 @@
 
 <script>
 import { pageEvent } from "../eventbus/page";
+import SlideShow from "../components/home/SlideShow.vue";
+import ArticleFile from '../components/home/ArticleFile'
+import { getAllAritcleFileAndFolders } from "../requests/aritcle";
 
 export default {
+    components: {
+        SlideShow,
+        ArticleFile
+    },
     data() {
         return {
             hidden: false,
+            files: [],
+            folders: [],
         };
+    },
+
+    computed: {
+        rootFiles() {
+            return this.files.filter((v) => !v.folderId);
+        },
+        treeData() {
+            const folderTable = new Map();
+            this.folders.forEach((folder) => {
+                folderTable.set(folder.folderId, folder);
+            });
+
+            const roots = this.folders.filter((v) => !v.parentId);
+            const rootIdSet = new Set(roots.map((v) => v.folderId));
+            const rootKids = this.folders.filter(
+                (v) => v.parentId && rootIdSet.has(v.parentId)
+            );
+
+            const keepIdSet = new Set(
+                roots.concat(rootKids).map((v) => v.folderId)
+            );
+
+            const findKeepIdCache = new Map();
+
+            const findKeepId = (folderId) => {
+                if (keepIdSet.has(folderId)) return folderId;
+
+                const cache = findKeepIdCache.get(folderId);
+                if (cache) return cache;
+
+                const folder = folderTable.get(folderId);
+                const parentId = folder.parentId;
+
+                const res = findKeepId(parentId);
+                findKeepIdCache.set(folderId, res);
+
+                return res;
+            };
+
+            const childrenFiles = new Map();
+
+            this.files.forEach((v) => {
+                if (!v.folderId) return;
+                const keepId = findKeepId(v.folderId);
+                childrenFiles.set(
+                    keepId,
+                    (childrenFiles.get(keepId) || []).concat([v])
+                );
+            });
+
+            return { roots, childrenFiles };
+        },
     },
 
     mounted() {
         pageEvent.$on("update", (page) => (this.hidden = !!page));
+        this.load();
+    },
+
+    methods: {
+        async load() {
+            const { files, folders } = await getAllAritcleFileAndFolders();
+            this.files = files;
+            this.folders = folders;
+        },
+
+        title(info) {
+            return (info.remark || "").split(" | ")[0] || "(暂无标题)";
+        },
+        tag(info) {
+            return (info.remark || "").split(" | ")[1] || "";
+        },
     },
 };
 </script>
@@ -88,11 +152,12 @@ export default {
     &.hidden {
         height: 0;
         opacity: 0;
+        overflow-y: hidden;
     }
 }
 
 .article-list {
-    padding-bottom: 271px;
+    padding-top: 72px;
     .article-list-title {
         > .title {
             font-size: 30px;
@@ -111,7 +176,7 @@ export default {
         }
 
         text-align: left;
-        margin-bottom: 48px;
+        margin-bottom: 64px;
         border-bottom: 2px solid #000000;
         padding-bottom: 17px;
     }
@@ -124,7 +189,6 @@ export default {
             font-weight: bolder;
             color: #666;
             margin-bottom: 12px;
-            margin-top: 24px;
         }
 
         &:hover .article-list-sub-title {

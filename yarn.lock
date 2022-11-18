@@ -3759,10 +3759,10 @@ e-components-file@^0.0.6:
     "@babel/preset-env" "^7.18.10"
     togii-cli-vue2-component "^0.0.27"
 
-e-model@^0.0.7:
-  version "0.0.7"
-  resolved "http://1.15.102.208:4873/e-model/-/e-model-0.0.7.tgz#3cc862927404303d4ab71011b713f3a8fa7bc2c8"
-  integrity sha512-RFavcun+D0vyRo5fpb5M7y16T1ZVlgPwKq2EuE+DrOH7r0YcqUeW11HUiAAhYHtfQ7EPpE1W3RVxOHBFGEx+Hw==
+e-model@^0.0.12:
+  version "0.0.12"
+  resolved "http://1.15.102.208:4873/e-model/-/e-model-0.0.12.tgz#fb3a76abf5f36dc852faaefc55176c4d40689d63"
+  integrity sha512-OvTHNNkf7EkuSMJCtoVovyqgXdZnB6Ci3jfMbT25gUrGMTywnm8fnyVEqEO2e1k1cDOF/+W4KozMoFcOKlZzyQ==
 
 e-request@^0.0.12:
   version "0.0.12"

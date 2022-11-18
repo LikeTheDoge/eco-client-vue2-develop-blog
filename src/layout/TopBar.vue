@@ -8,7 +8,7 @@
                 </div>
                 <!-- <GlobalSearch /> -->
             </div>
-            <div class="top-header-title">{{title}}{{title}}</div>
+            <div class="top-header-title">{{title}}</div>
         </div>
 
     </div>
@@ -19,14 +19,14 @@ import GlobalSearch from "../components/GlobalSearch.vue";
 import { pageEvent } from "../eventbus/page";
 export default {
     data() {
-        return { title: "", page: null, path: "" };
+        return { title: "", page: null, path: "" , tags:[]};
     },
     components: { GlobalSearch },
     mounted() {
         pageEvent.$on("update", (page) => {
             this.page = page;
             if (this.page) {
-                this.title = page.remark;
+                this.title = page.remark.split(' | ')[0];
                 this.path = page.path
             }else{
                 this.title = this.path = ''

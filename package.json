@@ -19,7 +19,7 @@
         "core-js": "^3.6.5",
         "e-auth": "^0.0.12",
         "e-components-file": "^0.0.6",
-        "e-model": "^0.0.7",
+        "e-model": "^0.0.12",
         "e-request": "^0.0.12",
         "e-user": "^0.0.12",
         "github-markdown-css": "^5.1.0",

@@ -24,7 +24,7 @@ import CurrentInfo from "./layout/CurrentInfo.vue";
 import HomePage from "./layout/HomePage.vue";
 import ArticelContent from "./layout/AritcleConent.vue";
 import { pageEvent } from "./eventbus/page";
-import { getArticleFile } from "./requests/aritcle";
+import { getArticleFileByPath } from "./requests/aritcle";
 
 export default {
     components: {
@@ -53,7 +53,7 @@ export default {
     methods: {
         async reflash() {
             if (this.post) {
-                const file = await getArticleFile();
+                const file = await getArticleFileByPath(this.post);
                 console.log(file);
                 pageEvent.$emit("update", file);
                 this.loaded = true;
@@ -90,6 +90,10 @@ export default {
 html,
 body {
     margin: 0;
+}
+
+body{
+    overflow-x:hidden;
 }
 
 * {

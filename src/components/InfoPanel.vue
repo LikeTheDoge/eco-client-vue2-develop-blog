@@ -49,7 +49,7 @@ export default {
     width: 0;
     overflow: hidden;
     padding-top: 54px;
-    transition: all 0.6s cubic-bezier(0.17, 0.67, 0.36, 0.99);
+    transition: all 0.6s ease;
     &.show {
         border-left: 2px solid var(--theme-color-light);
         width: 320px;

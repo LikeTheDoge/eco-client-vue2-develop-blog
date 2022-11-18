@@ -50,7 +50,7 @@ nav.sidebar {
     display: flex;
     flex-direction: column;
 
-    transition: all 0.6s cubic-bezier(0.17, 0.67, 0.36, 0.99);
+    transition: all 0.6s ease;
 
     &::-webkit-scrollbar-track {
         background-color: #f5f5f5;

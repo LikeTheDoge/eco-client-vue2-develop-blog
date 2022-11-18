@@ -91,17 +91,6 @@ export class FolderInfo {
     parentId = null
 
 
-    // 是否有子目录
-    @eType('boolean')
-    @eJson('hasSubDir')
-    existChildrenFolder
-
-    // 是否有共享文件
-    @eType('boolean') @eJson(
-        (m, j) => { m.hasSharedFile = !!j.hasSharedFile }
-    )
-    hasSharedFile
-
     @eType('datetime')
     @eJson('updateTime')
     contentUpdateTime
@@ -184,10 +173,6 @@ export class FileInfo {
     })
     path = ''
 
-    @eType('string')
-    @eJson('location')
-    location = ''
-
     @eType('datetime')
     @eJson('updateTime')
     contentUpdateTime
@@ -203,20 +188,6 @@ export class FileInfo {
 
     @eType('string')
     @eJson((m, j) => {
-        const num_size = j.platFile ? j.platFile.size : 0
-        const str_size = humanFileSize(num_size, true, 2)
-        m.fileSize = str_size
-    })
-    fileSize = ''
-
-    @eType('boolean')
-    @eJson((m, j) => {
-        m.isShared = !!j.isSharedFile
-    })
-    isShared = false
-
-    @eType('string')
-    @eJson((m, j) => {
         m.downloadUrl = j.platFile ? j.platFile.downLoadUrl : ''
     })
     downloadUrl = ''
@@ -224,6 +195,23 @@ export class FileInfo {
     @eType('string')
     @eJson('location')
     sharedUrl = ''
+
+    @eType('string')
+    @eJson((m, j) => {
+        m.updateUserName = j.sysUser ?
+            j.sysUser.nickname :
+            '(暂无)'
+    })
+    updateUserName = ''
+
+    @eType('string')
+    @eJson((m, j) => {
+        m.updateUserAvatar = j.sysUser ?
+            getAvatarUrl(j.sysUser.avatar) :
+            ''
+    })
+    updateUserAvatar = ''
+
 }
 
 @eModel('Record')
