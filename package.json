@@ -6,9 +6,9 @@
     "main": "index.js",
     "scripts": {
         "serve": "vue-cli-service serve --mode=development",
-        "clean": "rimraf ./dist",
+        "build": "yarn clean && vue-cli-service build  --mode=production",
         "prod": "npx togii-static 5173 ./dist",
-        "build": "yarn clean && vue-cli-service build  --mode=production"
+        "clean": "rimraf ./dist"
     },
     "author": "",
     "license": "ISC",
@@ -32,6 +32,8 @@
         "unified": "^10.1.2",
         "vue": "^2.6.11",
         "vue-router": "^3.2.0",
+        "rimraf": "^3.0.2",
+        "togii-static": "^0.0.27",
         "vuex": "^3.4.0"
     },
     "devDependencies": {
