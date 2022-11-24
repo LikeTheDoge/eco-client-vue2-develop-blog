@@ -1,13 +1,14 @@
 <template>
     <div :class="{'self-record-item':true, focus}">
-        <div class="record-user-avatar"></div>
+        <div class="record-user-avatar" 
+            :style="{ backgroundImage: `url(${record.createUserAvatar})` }"></div>
         <div class="record-info">
-            <div class="nickname">赵伯叔 <span style="float:right;opacity:0.7">2022-3-21</span></div>
+            <div class="nickname">{{record.createUserName}}  <span style="float:right;opacity:0.7"><DateText :date="record.createTime" /></span></div>
             <div
                 class="content"
-                :title="content"
+                :title="record.content"
             >
-                {{content}}
+                {{record.content||'（没有修改信息）'}}
             </div>
         </div>
     </div>
@@ -16,13 +17,7 @@
 
 <script>
 export default {
-    props: ["focus"],
-    data() {
-        return {
-            content:
-                "like_the_dogelike_the_dogelike_the_dogelike_the_dogelike_the_dogelike_the_dogelike_the_dogelike_the_dogelike_the_dogelike_the_doge",
-        };
-    },
+    props: ["focus", "record"]
 };
 </script>
 
@@ -44,6 +39,7 @@ export default {
         background: #66ccff;
         margin: 2px 12px 0 0;
         flex: none;
+        background-size: cover;
     }
     .record-info {
         flex: auto;

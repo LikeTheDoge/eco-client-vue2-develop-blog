@@ -13,6 +13,7 @@
 .main-page {
     flex: auto;
     display: flex;
+    // overflow: auto;
     flex-direction: column;
     > .bar {
         flex: none;

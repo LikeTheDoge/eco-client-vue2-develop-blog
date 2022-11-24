@@ -3,11 +3,15 @@
         <div class="file-records-title">
             <div>最近修改记录</div>
         </div>
-        <div class="file-records-detail" ref="detail">
+        <div
+            class="file-records-detail"
+            ref="detail"
+        >
             <SelfRecordItem
                 :focus="!detail"
                 v-for="v in list"
-                :key="v"
+                :key="v.recordId"
+                :record="v"
             />
         </div>
         <div
@@ -23,8 +27,11 @@
 </template>
 <script>
 import SelfRecordItem from "./item/SelfRecordItem.vue";
+import { getRecords } from "../../../requests/aritcle";
 export default {
     components: { SelfRecordItem },
+    props: ["info"],
+
     data() {
         return {
             detail: false,
@@ -36,13 +43,19 @@ export default {
             this.detail = !this.detail;
         },
     },
-    watch:{
-      detail(){
-        if(this.detail === false){
-          this.$refs.detail.scrollTo({top:0,behavior: 'smooth'})
-        }
-      }
-    }
+    watch: {
+        detail() {
+            if (this.detail === false) {
+                this.$refs.detail.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        },
+        async info() {
+            this.list = [];
+            if (this.info) {
+                this.list = await getRecords(this.info.fileId);
+            }
+        },
+    },
 };
 </script>
 <style lang="scss" scoped>

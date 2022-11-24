@@ -6,7 +6,6 @@
     >
         <at-select-panel
             ref="at"
-            :searchKey="searchKey"
             :searchAt="searchAt"
             @submit="({ target, user }) => updateUser(target, user)"
         ></at-select-panel>
@@ -78,10 +77,9 @@ export default {
         searchAt: {
             default: () => () => Promise.resolve([]),
         },
-        jumpUrl: { required: true },
-        pageName: { required: true },
-        type: { required: true },
-        dataId: { required: true },
+        option: {
+            default: () => () => {},
+        },
     },
     data() {
         return {
@@ -89,16 +87,7 @@ export default {
             loading: false,
             fileList: [],
             at: new TextareaWithAt(),
-            comment: this.createComment({
-                type: this.type,
-                dataId: this.dataId,
-                jumpUrl: this.jumpUrl,
-                pageName: this.pageName,
-            }),
-            searchKey:
-                this.$route.params.type === "products"
-                    ? "info-system-discuss"
-                    : "info-solution-discuss",
+            comment: this.createComment(this.option),
         };
     },
     mounted() {
@@ -182,9 +171,9 @@ export default {
 
             if (str2 === target.text) {
                 this.comment.atUsers.push(user);
-                this.comment.content = str1 + user.username + " " + str3;
+                this.comment.content = str1 + user.nickname + " " + str3;
                 this.$nextTick().then(() => {
-                    const e = str1 + user.username;
+                    const e = str1 + user.nickname;
                     this.$refs.textarea.setSelectionRange(
                         e.length + 2,
                         e.length + 2
@@ -234,12 +223,7 @@ export default {
         submit(comment) {
             (this.send ? this.send(comment) : Promise.resolve(""))
                 .then(() => {
-                    this.comment = this.createComment({
-                        type: this.type,
-                        dataId: this.dataId,
-                        jumpUrl: this.jumpUrl,
-                        pageName: this.pageName,
-                    });
+                    this.comment = this.createComment(this.option);
                     this.$emit("done");
                 })
                 .finally(() => {
@@ -255,13 +239,8 @@ export default {
                     this.$refs.textarea.selectionEnd =
                         this.$refs.textarea.value.length;
             });
-            this.comment = this.createComment({
-                type: this.type,
-                dataId: this.dataId,
-                jumpUrl: this.jumpUrl,
-                pageName: this.pageName,
-            });
-            this.comment.content = `回复 @${comment.user.username} ： `;
+            this.comment = this.createComment(this.option);
+            this.comment.content = `回复 @${comment.user.nickname} ： `;
             this.comment.atUsers = [comment.user];
         },
     },

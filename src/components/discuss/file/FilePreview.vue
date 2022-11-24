@@ -20,7 +20,7 @@
             <div
                 class="image-icon"
                 v-if="file.isPic"
-                :style="{backgroundImage:`url(${file.url})`}"
+                :style="{backgroundImage:`url(${file.downloadUrl})`}"
             ></div>
             <a-icon
                 type="file"
@@ -40,12 +40,12 @@ export default {
       window.open(this.file.downloadUrl)
     },
     preview () {
-      this.$imagePreview({
-        initIndex: 0,
-        isEnableImagePageIndicator:false,
-        zIndex:999999,
-        images: [this.file.downloadUrl]
-      })
+    //   this.$imagePreview({
+    //     initIndex: 0,
+    //     isEnableImagePageIndicator:false,
+    //     zIndex:999999,
+    //     images: [this.file.downloadUrl]
+    //   })
     }
   },
   mounted () {

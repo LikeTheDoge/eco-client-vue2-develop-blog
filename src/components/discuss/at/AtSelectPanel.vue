@@ -18,17 +18,16 @@
         >
             <div class="ava">
 
-                <eco-avatar
-                    :font="12"
+                <UserAvatar
                     :size="32"
-                    :user="v"
+                    :url="v.avatarUrl"
                 >
-                </eco-avatar>
+                </UserAvatar>
             </div>
 
             <flex-fill>
-                <div class="username">{{v.username}}</div>
-                <div class="nickname">{{v.nickname}}</div>
+                <div class="username">{{v.nickname}}</div>
+                <div class="nickname">{{v.account}}</div>
             </flex-fill>
         </flex-row>
 
@@ -38,7 +37,7 @@
 
 <script>
 export default {
-  props:['searchKey','searchAt'],
+  props:['searchAt'],
 
   data () {
     return {
@@ -50,7 +49,6 @@ export default {
       currentIdx: 0
     }
   },
-  // components: { EcoAvatar },
 
   watch: {
     async currentIdx () {
@@ -98,7 +96,6 @@ export default {
       this.left = left > maxLeft ? maxLeft : left
       this.visible = true
       this.searchAt(
-          this.searchKey,
           target.text
       ).then((list) => {
         this.list = list

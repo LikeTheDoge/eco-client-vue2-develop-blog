@@ -40,10 +40,13 @@ h1.md-heading::before {
 }
 
 h2 {
+    margin: 20px 0 13px;
     margin-top: 2rem;
     font-size: var(--h2-font-size);
-    line-height: 1.2;
+    line-height: 1.6;
     letter-spacing: var(--h2-letter-spacing);
+    border-bottom: 1px solid #dbdbdb;
+    padding-bottom: 7px;
 }
 
 h2.md-heading::before {
@@ -52,8 +55,11 @@ h2.md-heading::before {
 
 h3 {
     font-size: var(--h3-font-size);
-    line-height: 1.3;
+    line-height: 1.4;
     letter-spacing: var(--h3-letter-spacing);
+    border-left: 8px rgb(239, 100, 33) solid;
+    padding-left: 8px;
+    margin: 24px 0 20px;
 }
 
 h3.md-heading::before {

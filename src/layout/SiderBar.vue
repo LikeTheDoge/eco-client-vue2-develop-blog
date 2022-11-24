@@ -51,6 +51,7 @@ nav.sidebar {
     flex-direction: column;
 
     transition: all 0.6s ease;
+    overflow-x: hidden;
 
     &::-webkit-scrollbar-track {
         background-color: #f5f5f5;

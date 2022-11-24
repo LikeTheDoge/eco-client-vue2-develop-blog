@@ -1,5 +1,5 @@
 import { ERequest } from "e-request";
-import { FileInfo, FolderInfo, ProjectInfo } from "../models/base";
+import { FileInfo, FolderInfo, Record } from "../models/base";
 import { fromJson } from 'e-model'
 
 const plat = new ERequest('/eco-plat-static-server')
@@ -22,9 +22,6 @@ export const getSliderShowData = async() => {
 
 export const getArticleFileByPath = (path) => plat.get(`/file/getFileByPath${path}`)
     .then(data => fromJson(FileInfo, data))
-
-
-
 
 export const getAllAritcleFileAndFolders = (projectId = '2') => plat.get(`/file/getProjectListData/${projectId}`)
     .then(({ project, viewFileList }) => viewFileList.map(v => Object.assign(v, { project })))
@@ -57,3 +54,6 @@ export const getAllAritcleFileAndFolders = (projectId = '2') => plat.get(`/file/
 
         return { folders: mdFolders, files: mdFiles }
     })
+
+export const getRecords = async(id) => plat.get(`/record/getRecordsByIds`, { id })
+    .then(data => data.map(json => fromJson(Record, json)))

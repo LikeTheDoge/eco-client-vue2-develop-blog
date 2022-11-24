@@ -1,7 +1,7 @@
 <template>
     <div :class="{ 'info-panel': true, show: !hidden}">
         <div class="info-panel-inner">
-            <FileRecords :info="null" />
+            <FileRecords :info="file" />
         </div>
     </div>
 </template>
@@ -17,26 +17,27 @@ export default {
     },
     data() {
         return {
-            states: [],
+            re: [],
             hidden: false,
+            file: null,
             createComment: (obj) =>
                 Object.assign(new CommentInputWithAt(), obj),
         };
     },
-    methods: {
-        $$load(list) {
-            this.states = list;
-        },
-    },
     mounted() {
-        pageEvent.$on("update", (page) => (this.hidden = !page));
-        
-        pageEvent.$on('focusContent',()=>{
-            this.hidden = true
-        })
-        pageEvent.$on('showSider',()=>{
-            this.hidden = false
-        })
+        pageEvent.$on("update", (file) => {
+            this.hidden = !file;
+            if (file) {
+                this.file = file
+            }
+        });
+
+        pageEvent.$on("focusContent", () => {
+            this.hidden = true;
+        });
+        pageEvent.$on("showSider", () => {
+            this.hidden = false;
+        });
     },
 };
 </script>

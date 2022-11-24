@@ -93,7 +93,7 @@ export class TextareaWithAt {
 
                             list.push({
                                 type: '@',
-                                username: value.substring(begin + 1, idx),
+                                nickname: value.substring(begin + 1, idx),
                                 text: clearCurrent(false)
                             })
 
@@ -110,7 +110,7 @@ export class TextareaWithAt {
                 if (begin >= 0) {
                     list.push({
                         type: '@',
-                        username: value.substring(begin + 1),
+                        nickname: value.substring(begin + 1),
                         text: clearCurrent(false)
                     })
                 } else {
@@ -122,8 +122,8 @@ export class TextareaWithAt {
                     if (typeof v === 'string') {
                         return v
                     } else if (v.type === '@') {
-                        const uname = v.username
-                        const user = users.find(v => v.username === uname)
+                        const uname = v.nickname
+                        const user = users.find(v => v.nickname === uname)
 
                         if (user) return v
                         else return v.text
@@ -174,7 +174,7 @@ export class TextareaWithAt {
         })
     }
 
-    createAt(){
+    createAt() {
         this.el_copy.scrollTop = this.el.scrollTop
 
         const sIdx = this.el.selectionStart
@@ -206,6 +206,6 @@ export class TextareaWithAt {
 
     filterUsers(list = []) {
         const atlist = scan(this.el.value)
-        return list.filter(s => atlist.find(v => v.text === s.username))
+        return list.filter(s => atlist.find(v => v.text === s.nickname))
     }
 }

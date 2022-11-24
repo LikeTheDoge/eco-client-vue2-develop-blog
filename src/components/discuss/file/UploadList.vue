@@ -59,7 +59,7 @@ export default {
           }
         ])
       )
-      this.uploadFile(this.dataId, file)
+      this.uploadFile(file)
         .then((doneFile) => {
           this.$emit(
             'update:list',

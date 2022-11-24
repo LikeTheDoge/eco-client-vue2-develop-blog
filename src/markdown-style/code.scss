@@ -1,0 +1,14 @@
+pre {
+    margin: 2px 0 8px;
+    padding: 18px;
+    background-color: #f4f7f8;
+    word-break: break-all;
+    width: 100%;
+    overflow: auto;
+    code {
+        padding: 0;
+        color: inherit;
+        white-space: pre-wrap;
+        background-color: transparent;
+    }
+}

@@ -27,7 +27,7 @@ module.exports = {
         port: 5173,
         proxy: {
             '/': {
-                target: 'http://192.168.161.10:11080/',
+                target: 'http://192.168.161.10/',
                 ws: true,
                 bypass: function(req) {
                     const url = req.url.replace(/(http:\/\/)?localhost:[0-9]+/, '')
