@@ -19,7 +19,9 @@ body {
 }
 
 & {
+    font-size: var(--font-size);
     line-height: var(--line-height);
+    padding-bottom: 240px;
 }
 
 html {
@@ -105,4 +107,9 @@ small {
 sub,
 sup {
     font-size: var(--font-size-s);
+}
+
+img {
+    display: block;
+    max-width: 100%;
 }

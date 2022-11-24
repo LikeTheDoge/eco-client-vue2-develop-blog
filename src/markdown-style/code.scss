@@ -12,3 +12,13 @@ pre {
         background-color: transparent;
     }
 }
+
+code {
+    color: var(--red-500);
+    background-color: var(--red-50);
+    padding: 2px 3px;
+    line-height: 1.5;
+    letter-spacing: -.3px;
+    border-radius: 2px;
+    margin-right: 2px;
+}
