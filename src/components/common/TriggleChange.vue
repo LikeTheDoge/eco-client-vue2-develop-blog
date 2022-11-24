@@ -44,8 +44,6 @@ export default {
         const { height: detailHeight } =
           this.$refs.content_true.getBoundingClientRect();
         cntr.style.height = `${detailHeight}px`;
-        console.log(detailHeight)
-
         setTimeout(() => {
           cntr.style.height = "";
         }, 300);

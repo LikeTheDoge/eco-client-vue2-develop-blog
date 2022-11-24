@@ -104,8 +104,6 @@ export default {
             const nextIdx =
                 currentIdx === this.list.length - 1 ? 0 : this.current + 1;
 
-            console.log(currentIdx, nextIdx);
-
             const current = this.$images[currentIdx];
             const next = this.$images[nextIdx];
 

@@ -25,7 +25,6 @@ export default {
         },
         tag() {
             const info = this.file;
-            console.log(this.file)
             return (info.remark || "").split(" | ")[1] || "";
         },
     },

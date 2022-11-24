@@ -157,8 +157,6 @@ export class TextareaWithAt {
 
             const target = hit(this.el.value, sIdx)
 
-            console.log('target', target)
-
             if (target) {
 
                 let range = new Range()
@@ -184,7 +182,6 @@ export class TextareaWithAt {
 
         const target = hit(this.el.value, sIdx)
 
-        console.log('target', target)
 
         if (target) {
 

@@ -69,7 +69,6 @@ export default {
     },
 
     async inputSubmit() {
-      console.log("submit");
       const res = await this.$$validate();
       if (!res) return;
       await this.submit(this.$$value());

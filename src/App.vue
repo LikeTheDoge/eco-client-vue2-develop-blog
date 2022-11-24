@@ -54,7 +54,6 @@ export default {
         async reflash() {
             if (this.post) {
                 const file = await getArticleFileByPath(this.post);
-                console.log(file);
                 pageEvent.$emit("update", file);
                 this.loaded = true;
                 this.focusContent = false
