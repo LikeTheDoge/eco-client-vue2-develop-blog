@@ -17,7 +17,7 @@
 
 <script>
 import { toJson } from "e-model";
-import { searchAt, createComment } from "../models/comment";
+import { searchAt, createComment } from "../models/atcomment";
 import { uploadCommentFile } from "../requests/comment";
 export default {
     data() {

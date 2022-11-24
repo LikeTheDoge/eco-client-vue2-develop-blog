@@ -1,6 +1,6 @@
 import { ERequest } from "e-request";
 import { fromJson } from 'e-model'
-import { CommentUplodaFile } from "../models/comment";
+import { CommentUplodaFile } from "../models/atcomment";
 
 const upload = new ERequest('/eco-plat-file')
 
